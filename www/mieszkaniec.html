@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Mieszkańca - System Awaryjny</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg-color); 
+            color: var(--text-color);
+            margin: 0; 
+            padding: 20px; 
+        }
+
+        .wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .user-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: var(--card-bg); 
+            padding: 15px 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 20px; 
+        }
+
+        .user-info-text {
+            font-size: 15px;
+            color: #555;
+        }
+
+        .user-info-text strong {
+            color: var(--text-color);
+        }
+
+        .btn-logout { 
+            background: #fff5f5; 
+            color: #e53e3e; 
+            border: 1px solid #feb2b2; 
+            padding: 8px 16px; 
+            border-radius: 6px; 
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover { 
+            background: #e53e3e; 
+            color: white; 
+        }
+        
+        .notification-banner { 
+            background: #fffaf0; 
+            border: 1px solid #feebc8; 
+            color: #c05621; 
+            padding: 12px 20px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            text-align: center; 
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .notification-banner button {
+            background: #dd6b20; 
+            color: white; 
+            border: none; 
+            padding: 6px 12px; 
+            border-radius: 4px; 
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .notification-banner button:hover {
+            background: #c05621;
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            padding: 25px; 
+            margin-bottom: 25px; 
+        }
+
+        h2, h3 { 
+            color: var(--text-color); 
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        /* Przyciski szybkiego wyboru */
+        .quick-buttons-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #718096;
+            margin-bottom: 8px;
+        }
+
+        .quick-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .quick-btn {
+            background: #edf2f7;
+            border: 1px solid #cbd5e0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #2d3748;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .quick-btn:hover {
+            background: #e2e8f0;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        label { 
+            display: block; 
+            margin-top: 15px; 
+            margin-bottom: 6px;
+            font-weight: 600; 
+            font-size: 14px;
+            color: #4a5568; 
+        }
+
+        input, select, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            background-color: #fafbfc;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+            background-color: #fff;
+        }
+
+        textarea { 
+            resize: vertical; 
+            height: 100px; 
+        }
+        
+        button.btn-submit { 
+            background: var(--primary-color); 
+            color: white; 
+            border: none; 
+            padding: 12px; 
+            width: 100%; 
+            margin-top: 25px; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            font-weight: 600;
+            cursor: pointer; 
+            transition: background 0.2s;
+        }
+
+        button.btn-submit:hover { 
+            background: var(--primary-hover); 
+        }
+
+        .report-item { 
+            background: #fafbfc; 
+            border: 1px solid var(--border-color); 
+            border-left: 4px solid var(--primary-color); 
+            padding: 18px; 
+            margin-bottom: 15px; 
+            border-radius: 8px; 
+            transition: transform 0.2s;
+        }
+
+        .report-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+        }
+
+        .report-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .report-category {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 15px;
+        }
+
+        .report-date {
+            font-size: 12px;
+            color: #718096;
+        }
+
+        .report-desc {
+            color: #4a5568;
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .status { 
+            font-weight: 600; 
+            padding: 4px 10px; 
+            border-radius: 20px; 
+            display: inline-block; 
+            font-size: 12px; 
+        }
+        .status.Zgłoszone { background: #fed7d7; color: #9b2c2c; }
+        .status.Przyjęte { background: #ebf8ff; color: #2b6cb0; }
+        .status.W.realizacji { background: #feebc8; color: #9c4221; }
+        .status.Rozwiązane { background: #c6f6d5; color: #22543d; }
+
+        .empty-state {
+            text-align: center; 
+            color: #a0aec0; 
+            padding: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="user-header">
+        <span class="user-info-text" id="userInfo">Ładowanie danych użytkownika...</span>
+        <button class="btn-logout" id="logoutBtn">Wyloguj się</button>
+    </div>
+
+    <div id="notification-permission-box" class="notification-banner" style="display: none;">
+        <span>Chcesz dostawać powiadomienia, gdy zmieni się status zgłoszenia?</span>
+        <button onclick="requestNotificationPermission()">Włącz powiadomienia</button>
+    </div>
+
+    <!-- Karta zgłaszania -->
+    <div class="card">
+        <h2>Zgłoś Awarię Elektryczną</h2>
+        
+        <div class="quick-buttons-label">Szybki wybór częstych awarii:</div>
+        <div class="quick-buttons-grid">
+            <button type="button" class="quick-btn" onclick="setCategoryTemplate('Oświetlenie na piętrze', 'Nie świeci się światło na piętrze / korytarzu.')">💡 Oświetlenie na piętrze</button>
+            <button type="button" class="quick-btn" onclick="setCategoryTemplate('Oświetlenie w piwnicy', 'Awaria oświetlenia w sekcji piwnicznej.')">💡 Oświetlenie w piwnicy</button>
+            <button type="button" class="quick-btn" onclick="setCategoryTemplate('Oświetlenie skrzynek na listy', 'Problem z oświetleniem przy skrzynkach na listy.')">📬 Oświetlenie skrzynek</button>
+            <button type="button" class="quick-btn" onclick="setCategoryTemplate('Oświetlenie wiatrołap', 'Lampy w wiatrołapie nie świecą.')">🚪 Oświetlenie wiatrołap</button>
+            <button type="button" class="quick-btn" onclick="setCategoryTemplate('Brak prądu w mieszkaniu', 'Brak zasilania / wyłączyły się bezpieczniki w lokalu.')">⚡ Brak prądu w mieszkaniu</button>
+        </div>
+
+        <form id="reportForm">
+            <label for="category">Kategoria awarii:</label>
+            <select id="category" required>
+                <option value="" disabled selected>-- Wybierz kategorię --</option>
+                <option value="Oświetlenie na piętrze">Oświetlenie na piętrze</option>
+                <option value="Oświetlenie w piwnicy">Oświetlenie w piwnicy</option>
+                <option value="Oświetlenie skrzynek na listy">Oświetlenie skrzynek na listy</option>
+                <option value="Oświetlenie wiatrołap">Oświetlenie wiatrołap</option>
+                <option value="Brak prądu w mieszkaniu">Brak prądu w mieszkaniu</option>
+            </select>
+
+            <label for="description">Opis problemu:</label>
+            <textarea id="description" placeholder="Opisz dokładnie, co się stało..." required></textarea>
+
+            <button type="submit" class="btn-submit">Wyślij zgłoszenie</button>
+        </form>
+    </div>
+
+    <!-- Karta historii zgłoszeń -->
+    <div class="card">
+        <h3>Historia zgłoszeń z Twojego mieszkania</h3>
+        <div id="my-reports-container">
+            <p class="empty-state">Pobieranie zgłoszeń...</p>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, addDoc, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD1c0o7ZwynyMjf8OXxjQ2GLWDLiKGgpGg",
+        authDomain: "systemawaryjny-56f6b.firebaseapp.com",
+        projectId: "systemawaryjny-56f6b",
+        storageBucket: "systemawaryjny-56f6b.firebasestorage.app",
+        messagingSenderId: "649847892441",
+        appId: "1:649847892441:web:b9745a9e1cb09edb6591c8",
+        measurementId: "G-GKMT2DDWBK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let userKlatka = "";
+    let userMieszkanie = "";
+    let isFirstLoad = true;
+
+    window.setCategoryTemplate = (cat, desc) => {
+        document.getElementById('category').value = cat;
+        document.getElementById('description').value = desc;
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            window.location.href = "logowanie.html";
+            return;
+        }
+
+        checkNotificationPermissionUI();
+
+        try {
+            const userDocRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                userKlatka = userData.klatka;
+                userMieszkanie = userData.mieszkanie;
+
+                document.getElementById('userInfo').innerHTML = `Zalogowany: <strong>${userData.imie} ${userData.nazwisko}</strong> (Klatka: ${userKlatka}, Mieszkanie: ${userMieszkanie})`;
+                
+                loadMyReports(userKlatka, userMieszkanie);
+            } else {
+                document.getElementById('userInfo').textContent = "Błąd wczytywania profilu";
+            }
+        } catch (error) {
+            console.error("Błąd pobierania profilu:", error);
+        }
+    });
+
+    window.checkNotificationPermissionUI = () => {
+        if ("Notification" in window && Notification.permission === "default") {
+            document.getElementById('notification-permission-box').style.display = 'flex';
+        }
+    };
+
+    window.requestNotificationPermission = async () => {
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+            document.getElementById('notification-permission-box').style.display = 'none';
+            new Notification("System Awaryjny", { body: "Powiadomienia o statusie zgłoszeń włączone!" });
+        }
+    };
+
+    document.getElementById('reportForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const user = auth.currentUser;
+        if (!user) {
+            alert("Musisz być zalogowany!");
+            return;
+        }
+
+        const category = document.getElementById('category').value;
+        const description = document.getElementById('description').value;
+
+        try {
+            const userDocRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+
+            let imieNazwisko = "Nieznany użytkownik";
+            let klatka = userKlatka;
+            let mieszkanie = userMieszkanie;
+
+            if (userDocSnap.exists()) {
+                const uData = userDocSnap.data();
+                imieNazwisko = `${uData.imie} ${uData.nazwisko}`;
+                klatka = uData.klatka;
+                mieszkanie = uData.mieszkanie;
+            }
+
+            await addDoc(collection(db, "reports"), {
+                imieNazwisko: imieNazwisko,
+                klatka: klatka,
+                mieszkanie: mieszkanie,
+                category: category,
+                description: description,
+                createdAt: new Date(),
+                status: "Zgłoszone"
+            });
+
+            alert("Zgłoszenie zostało wysłane pomyślnie!");
+            document.getElementById('reportForm').reset();
+        } catch (error) {
+            console.error("Błąd wysyłania zgłoszenia:", error);
+            alert("Nie udało się wysłać zgłoszenia: " + error.message);
+        }
+    });
+
+    function loadMyReports(klatka, mieszkanie) {
+        const q = query(
+            collection(db, "reports"), 
+            where("klatka", "==", klatka),
+            where("mieszkanie", "==", mieszkanie)
+        );
+
+        onSnapshot(q, (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === "modified" && !isFirstLoad) {
+                    const data = change.doc.data();
+                    if ("Notification" in window && Notification.permission === "granted") {
+                        new Notification("Aktualizacja zgłoszenia!", {
+                            body: `Twoje zgłoszenie (${data.category}) zmieniło status na: ${data.status}`
+                        });
+                    }
+                }
+            });
+
+            isFirstLoad = false;
+            const container = document.getElementById('my-reports-container');
+            container.innerHTML = "";
+
+            if (snapshot.empty) {
+                container.innerHTML = `<p class="empty-state">Brak zgłoszeń z tego mieszkania.</p>`;
+                return;
+            }
+
+            let reportsList = [];
+            snapshot.forEach((docSnap) => {
+                reportsList.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            reportsList.sort((a, b) => {
+                const timeA = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
+                const timeB = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
+                return timeB - timeA;
+            });
+
+            reportsList.forEach((report) => {
+                let dateStr = "Brak daty";
+                if (report.createdAt && report.createdAt.toDate) {
+                    dateStr = report.createdAt.toDate().toLocaleString('pl-PL');
+                }
+
+                const status = report.status || "Zgłoszone";
+
+                const card = document.createElement('div');
+                card.className = `report-item`;
+                card.innerHTML = `
+                    <div class="report-header-row">
+                        <span class="report-category">${report.category}</span>
+                        <span class="report-date">${dateStr}</span>
+                    </div>
+                    <div class="report-desc">${report.description}</div>
+                    <div><span class="status ${status}">${status}</span></div>
+                `;
+                container.appendChild(card);
+            });
+        });
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await signOut(auth);
+        window.location.href = "logowanie.html";
+    });
+</script>
+
+</body>
+</html>

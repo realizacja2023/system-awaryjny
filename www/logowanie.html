@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logowanie - System Awaryjny</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { max-width: 400px; width: 100%; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        label { display: block; margin-top: 10px; font-weight: bold; color: #555; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background: #007bff; color: white; border: none; padding: 12px; width: 100%; margin-top: 20px; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .link { text-align: center; margin-top: 15px; }
+        .link a { color: #007bff; text-decoration: none; }
+        .link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Logowanie</h2>
+    <form id="loginForm">
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" required>
+
+        <label for="password">Hasło:</label>
+        <input type="password" id="password" required>
+
+        <button type="submit">Zaloguj się</button>
+    </form>
+    <div class="link">
+        Nie masz konta? <a href="rejestracja.html">Zarejestruj się</a>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD1c0o7ZwynyMjf8OXxjQ2GLWDLiKGgpGg",
+        authDomain: "systemawaryjny-56f6b.firebaseapp.com",
+        projectId: "systemawaryjny-56f6b",
+        storageBucket: "systemawaryjny-56f6b.firebasestorage.app",
+        messagingSenderId: "649847892441",
+        appId: "1:649847892441:web:b9745a9e1cb09edb6591c8",
+        measurementId: "G-GKMT2DDWBK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            const userDocRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                
+                // Sprawdzamy rolę i kierujemy odpowiednio
+                if (userData.role === "admin" || userData.role === "elektryk") {
+                    window.location.href = "admin.html";
+                } else {
+                    window.location.href = "mieszkaniec.html";
+                }
+            } else {
+                // Jeśli brak dokumentu w bazie, domyślnie rzucamy do mieszkańca
+                window.location.href = "mieszkaniec.html";
+            }
+
+        } catch (error) {
+            console.error("Błąd logowania:", error);
+            alert("Błąd logowania: " + error.message);
+        }
+    });
+</script>
+
+</body>
+</html>
