@@ -374,7 +374,7 @@
             const permission = await Notification.requestPermission();
             if (permission === "granted") {
                 const currentToken = await getToken(messaging, { 
-                    vapidKey: "" 
+                    vapidKey: "BASJBkwO-IO4p4ONYIFBWdVuX9hWhtN-A4MkGi6iLWbXibNXpxoa_W6W1eu3bt_3lgnwB3vM5aALYVRDg_lyvVw" 
                 }).catch(() => null);
 
                 if (auth.currentUser) {
