@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Tło ikony: Nowoczesny, ciemnoniebieski kwadrat z zaokrąglonymi rogami -->
+  <rect width="1024" height="1024" rx="220" fill="#0f172a" />
+  
+  <!-- Kontury domku -->
+  <path d="M512 220L180 480v380h240V640h184v220h240V480L512 220z" fill="none" stroke="#38bdf8" stroke-width="48" stroke-linejoin="round" stroke-linecap="round" />
+  <path d="M130 510L512 200l382 310" fill="none" stroke="#38bdf8" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Symbol elektryka (Błyskawica wewnątrz domu) w wyrazistym żółtym kolorze -->
+  <polygon points="550,340 430,530 510,530 470,720 610,490 530,490" fill="#facc15" stroke="#fef08a" stroke-width="12" stroke-linejoin="round" />
+</svg>
