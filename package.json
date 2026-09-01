@@ -1,7 +1,23 @@
 {
+  "name": "system-awaryjny",
+  "version": "1.0.0",
+  "description": "System awaryjny - aplikacja mobilna",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" and exit 1"
+  },
   "dependencies": {
-    "@capacitor/android": "^8.5.0",
-    "@capacitor/cli": "^8.5.0",
-    "@capacitor/core": "^8.5.0"
+    "@capacitor/android": "^5.7.0",
+    "@capacitor/cli": "^5.7.0",
+    "@capacitor/core": "^5.7.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5"
+  },
+  "capacitor": {
+    "assets": {
+      "icon": "icon.svg",
+      "splash": "splash.png"
+    }
   }
 }
